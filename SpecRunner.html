@@ -18,29 +18,30 @@
   <!-- Spec files -->
   <script src="spec/chatterboxSpec.js"></script>
 
-  <!-- Source files -->
-  <script src="client/scripts/app.js"></script>
-
+  
 </head>
 <body>
-<div id="mocha"></div>
-<div id="testarea" style="display: none;">
-
-  <div id="main">
-    <h1>chatterbox</h1>
-    <div class="spinner"><img src="client/images/spiffygif_46x46.gif"></div>
-    <div id="rooms">
-      Room:
-      <select id="roomSelect">
-      </select>
+  <div id="mocha"></div>
+  <div id="testarea" style="display: none;">
+    
+    <div id="main">
+      <h1>chatterbox</h1>
+      <div class="spinner"><img src="client/images/spiffygif_46x46.gif"></div>
+      <div id="rooms">
+        Room:
+        <select id="roomSelect">
+        </select>
+      </div>
+      <form action="#" id="send" method="post">
+        <input type="text" name="message" id="message"/>
+        <input type="submit" name="submit" class="submit"/>
+      </form>
+      <div id="chats"></div>
     </div>
-    <form action="#" id="send" method="post">
-      <input type="text" name="message" id="message"/>
-      <input type="submit" name="submit" class="submit"/>
-    </form>
-    <div id="chats"></div>
+    
   </div>
-
-</div>
+  <!-- Source files -->
+  <script src="client/scripts/Chatterbox.js"></script>
+  <script src="client/scripts/app.js"></script>
 </body>
 </html>

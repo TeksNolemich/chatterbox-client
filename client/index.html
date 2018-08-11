@@ -21,13 +21,57 @@
     </script>
     <!-- your scripts -->
     <script src="env/config.js"></script>
-    <script src="scripts/app.js"></script>
   </head>
   <body>
+    <!-- <div id="main">
+      <h1>chatterbox</h1>
+      <form id="message">
+          <input id="send" type="text" value="Type your message here...">
+        </form>
+      <div id="roomSelect"></div>
+    </div>
+    <div id="chats"></div> -->
+    <div id="main">
+        <h1>chatterbox</h1>
+        <div id="rooms">
+          Room:
+          <select id="roomSelect">
+          </select>
+        </div>
+        <form action="#" id="send">
+          <input type="text" name="message" id="message"/>
+          <input type="submit" name="submit" class="submit"/>
+        </form>
+        <div id="chats"></div>
+      </div>
+
+    <script src="scripts/Chatterbox.js"></script>
+    <script src="scripts/app.js"></script>
+
+
+    <!---
+    <div id="mocha"></div>
+  <div id="testarea" style="display: none;">
+    
     <div id="main">
       <h1>chatterbox</h1>
-      <!-- Your HTML goes here! -->
+      <div class="spinner"><img src="client/images/spiffygif_46x46.gif"></div>
+      <div id="rooms">
+        Room:
+        <select id="roomSelect">
+        </select>
+      </div>
+      <form action="#" id="send" method="post">
+        <input type="text" name="message" id="message"/>
+        <input type="submit" name="submit" class="submit"/>
+      </form>
+      <div id="chats"></div>
     </div>
-    <div id="chats"></div>
+    
+  </div>
+    
+    -->
+
+
   </body>
 </html>
