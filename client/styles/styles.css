@@ -5,14 +5,23 @@ body {
     font-family: arial, sans-serif;
 }
 
-#main, #chats {
+#main {
+    width: 600px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: left;
+    background: white;
+    border: solid #ddd;
+    border-width: 0 1px 1px 1px;
+}
+
+#chats {
     width: 500px;
     margin: auto;
     text-align: left;
     background: white;
-    padding: 50px 60px;
-    border: solid #ddd;
-    border-width: 0 1px 1px 1px;
 }
 
 #main h1 {
@@ -50,6 +59,9 @@ form {
     padding: 20px;
     padding-left: 0;
     margin-bottom: 20px;
+    width: 500px;
+    display: flex;
+    justify-content: center;
 }
 
 form input[type=text] {
@@ -86,5 +98,31 @@ form input[type=text] {
 .friend {
     color: #fff;
     background-color: #0090da;
+    font-weight: bold;
 }
 
+.messageContainer {
+    border: 1px solid darkgrey;
+    margin-bottom: 7px;
+    border-radius: 5px;
+} 
+
+p.timeStamp {
+    font-size: 12px;
+    color: blue;
+    font-style: italic;
+    margin-left: 10px;
+}
+
+p.text {
+    font-size: 24px;
+    margin-left: 10px;
+}
+
+p.username {
+    margin-left: 10px;
+}
+
+#roomSelect {
+    width: 150px;
+}

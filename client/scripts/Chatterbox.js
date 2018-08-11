@@ -1,10 +1,14 @@
 class Chatterbox {
   constructor() {
     this.server = 'http://parse.sfm8.hackreactor.com';
+    this.user = null;
     this.friends = {};
     this.messages = {
-      // '4chan': [ {user: Bob, text: Hello}]
+      // '4chan': MAP
     };
+    this.room = null;
+    this.needsToBeRendered = true;
+    this.initialized = false;
   }
 
   init() {
@@ -40,6 +44,7 @@ class Chatterbox {
         where: { text: { $exists: true } }
       },
       success: function (data) {
+        that.messages = {};
         data.results.forEach((message) => {
           let room = message.roomname;
           // console.log(message.objectId);
@@ -51,7 +56,24 @@ class Chatterbox {
           }
         });
         // TODO: get this variable somehow without pulling from global scope
-        that.renderDisplay(room);
+        // set the room based on messages fetched... render display on that room
+        if (!that.initialized) {
+          let targetRoom = null;
+          let targetRoomLength = 0;
+          for (let key in that.messages) {
+            if (that.messages[key].size > targetRoomLength) {
+              targetRoom = key;
+              targetRoomLength = that.messages[key].size;
+            }
+            that.room = targetRoom;
+            that.initialized = true;
+          }
+        }
+        if (that.needsToBeRendered) {
+          console.log('needs to be rendered... current room is ', that.room)
+          that.renderDisplay(that.room);
+          that.needsToBeRendered = false;
+        }
       },
       error: function (data) {
         // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
@@ -73,18 +95,21 @@ class Chatterbox {
     let $messageContainer = $(`<div class="messageContainer"></div>`);
 
     let $userName = $(`<p class="username"></p>`);
-    $userName.text(username);
+    $userName.text(username.trim());
+    if (this.friends.hasOwnProperty(username)) {
+      $userName.addClass('friend');
+    }
 
     let $text = $(`<p class="text"></p>`);
-    $text.text(text);
+    $text.text(text.trim());
 
     let $timeStamp = $(`<p class="timeStamp"></p>`);
-    $timeStamp.text(createdAt);
+    $timeStamp.text(moment(createdAt).fromNow());
 
     $messageContainer.append($userName);
     $messageContainer.append($text);
     $messageContainer.append($timeStamp);
-    $('#chats').prepend($messageContainer);
+    $('#chats').append($messageContainer);
   }
 
   renderRoom(roomname, isChosen = false) {
@@ -92,8 +117,8 @@ class Chatterbox {
     if (isChosen) {
       $room.prop('selected', true);
     }
-    $room.val(roomname);
-    $room.text(roomname);
+    // $room.val(roomname.trim());
+    $room.text(roomname.trim());
     $('#roomSelect').append($room);
   }
 
@@ -101,10 +126,11 @@ class Chatterbox {
     this.clearMessages();
     this.clearRooms();
     let messages = this.messages[room];
-    messages.forEach(message => {
-      console.log(message);
-      this.renderMessage(message);
-    });
+    if (messages) {
+      messages.forEach(message => {
+        this.renderMessage(message);
+      });
+    }
     for (let key in this.messages) {
       let isChosen = (key === room);
       this.renderRoom(key, isChosen);
@@ -122,6 +148,7 @@ class Chatterbox {
       roomname: room
     };
     this.send(message);
+    this.needsToBeRendered = true;
     console.log(messageText);
   }
 }

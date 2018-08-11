@@ -2,29 +2,32 @@
 let app = new Chatterbox();
 
 app.fetch();
-let userNombre = window.location.search.substring(10);
-let room = 'hr101';
+app.user = window.location.search.substring(10);
 
 // Event handlers
-$('body').on('click', '.username', function(e) {
+$('body').on('click', '.username', function (e) {
   let userName = $(this).text();
   app.handleUsernameClick(userName);
 });
 
-$('#send').on('submit', function(e) {
+$('#send').on('submit', function (e) {
   e.preventDefault();
   userNombre = window.location.search.substring(10);
   let inputMessage = e.currentTarget.children[0].value;
-  app.handleSubmit(inputMessage, room, userNombre);
+  app.handleSubmit(inputMessage, app.room, app.user);
   e.currentTarget.children[0].value = '';
 });
 
-
-$('#roomSelect').change(function(e) {
-  room = $(this).val();
-
-  app.renderDisplay(room);
+$('#roomSelect').change(function (e) {
+  // console.log(e);
+  app.room = e.currentTarget.value;
+  // console.log($(this));
+  // console.log(app.room);
+  // // console.log($(this).text());
+  app.renderDisplay(app.room);
 });
 
-
-// setTimeout(function(){})
+setInterval(function () {
+  app.needsToBeRendered = true;
+  app.fetch();
+}, 20000);
