@@ -2,9 +2,10 @@
 let app = new Chatterbox();
 
 app.fetch();
+let userNombre = window.location.search.substring(10);
+let room = 'hr101';
 
 // Event handlers
-//onClick of username
 $('body').on('click', '.username', function(e) {
   let userName = $(this).text();
   app.handleUsernameClick(userName);
@@ -12,13 +13,18 @@ $('body').on('click', '.username', function(e) {
 
 $('#send').on('submit', function(e) {
   e.preventDefault();
+  userNombre = window.location.search.substring(10);
   let inputMessage = e.currentTarget.children[0].value;
-  app.handleSubmit(inputMessage);
+  app.handleSubmit(inputMessage, room, userNombre);
   e.currentTarget.children[0].value = '';
 });
 
 
 $('#roomSelect').change(function(e) {
-  let room = $(this).val();
+  room = $(this).val();
+
   app.renderDisplay(room);
 });
+
+
+// setTimeout(function(){})

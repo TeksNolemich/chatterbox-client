@@ -20,7 +20,7 @@ class Chatterbox {
       contentType: 'application/json',
       success: function (data) {
         console.log('chatterbox: Message sent');
-        // that.fetch();
+        that.fetch();
       },
       error: function (data) {
         // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
@@ -36,15 +36,22 @@ class Chatterbox {
       type: 'GET',
       contentType: 'application/json',
       data: {
-        limit:1000,
-        where: { text : { $exists: true } }
+        limit: 1000,
+        where: { text: { $exists: true } }
       },
       success: function (data) {
         data.results.forEach((message) => {
           let room = message.roomname;
-          that.messages[room] ? that.messages[room].push(message) : that.messages[room] = [message];
+          // console.log(message.objectId);
+          if (that.messages.hasOwnProperty(room)) {
+            that.messages[room].set(message.objectId, message);
+          } else {
+            that.messages[room] = new Map();
+            that.messages[room].set(message.objectId, message);
+          }
         });
-        that.renderDisplay();
+        // TODO: get this variable somehow without pulling from global scope
+        that.renderDisplay(room);
       },
       error: function (data) {
         // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
@@ -72,30 +79,35 @@ class Chatterbox {
     $text.text(text);
 
     let $timeStamp = $(`<p class="timeStamp"></p>`);
-    $timeStamp.text(createdAt); 
+    $timeStamp.text(createdAt);
 
     $messageContainer.append($userName);
     $messageContainer.append($text);
     $messageContainer.append($timeStamp);
-    $('#chats').append($messageContainer);
+    $('#chats').prepend($messageContainer);
   }
 
-  renderRoom(roomname) {
+  renderRoom(roomname, isChosen = false) {
     let $room = $(`<option class="room"></option>`);
+    if (isChosen) {
+      $room.prop('selected', true);
+    }
     $room.val(roomname);
     $room.text(roomname);
     $('#roomSelect').append($room);
   }
 
-  renderDisplay(room = '4chan') {
+  renderDisplay(room) {
     this.clearMessages();
     this.clearRooms();
     let messages = this.messages[room];
     messages.forEach(message => {
+      console.log(message);
       this.renderMessage(message);
     });
-    for (let room in this.messages) {
-      this.renderRoom(room);
+    for (let key in this.messages) {
+      let isChosen = (key === room);
+      this.renderRoom(key, isChosen);
     }
   }
 
@@ -103,11 +115,11 @@ class Chatterbox {
     this.friends[userName] = this.friends[userName] + 1 || 1;
   }
 
-  handleSubmit(messageText) {
+  handleSubmit(messageText, room, user) {
     let message = {
-      username: 'Chris',
+      username: user,
       text: messageText,
-      roomname: 'hr101'
+      roomname: room
     };
     this.send(message);
     console.log(messageText);
