@@ -3,15 +3,20 @@ class Chatterbox {
     this.server = 'http://parse.sfm8.hackreactor.com';
     this.user = null;
     this.friends = {};
-    this.messages = {
-      // '4chan': MAP
-    };
+    this.messages = {};
     this.room = null;
     this.needsToBeRendered = true;
     this.initialized = false;
   }
 
   init() {
+    this.fetch();
+    this.user = window.location.search.substring(10);
+    let that = this;
+    setInterval(function () {
+      that.needsToBeRendered = true;
+      that.fetch();
+    }, 20000);
   }
 
   send(message) {
@@ -92,6 +97,9 @@ class Chatterbox {
   }
 
   renderMessage({ username, text, roomname, createdAt }) {
+    username = username || 'null';
+    text = text || 'null';
+    roomname = roomname || 'null';
     let $messageContainer = $(`<div class="messageContainer"></div>`);
 
     let $userName = $(`<p class="username"></p>`);
@@ -117,7 +125,6 @@ class Chatterbox {
     if (isChosen) {
       $room.prop('selected', true);
     }
-    // $room.val(roomname.trim());
     $room.text(roomname.trim());
     $('#roomSelect').append($room);
   }
@@ -149,6 +156,5 @@ class Chatterbox {
     };
     this.send(message);
     this.needsToBeRendered = true;
-    console.log(messageText);
   }
 }

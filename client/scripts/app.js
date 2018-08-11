@@ -1,8 +1,7 @@
 
 let app = new Chatterbox();
+app.init();
 
-app.fetch();
-app.user = window.location.search.substring(10);
 
 // Event handlers
 $('body').on('click', '.username', function (e) {
@@ -19,15 +18,18 @@ $('#send').on('submit', function (e) {
 });
 
 $('#roomSelect').change(function (e) {
-  // console.log(e);
   app.room = e.currentTarget.value;
-  // console.log($(this));
-  // console.log(app.room);
-  // // console.log($(this).text());
   app.renderDisplay(app.room);
 });
 
-setInterval(function () {
-  app.needsToBeRendered = true;
-  app.fetch();
-}, 20000);
+$('#newRoom').on('click', function(e) {
+  let roomName = prompt('Enter Room Name...');
+  let message = {
+    username: 'Chatterbox Bot',
+    text: `Creating Room ${roomName}`,
+    roomname: roomName 
+  };
+  app.handleSubmit(message.text, message.roomname, message.username);
+  app.room = roomName;
+});
+

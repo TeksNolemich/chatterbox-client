@@ -117,12 +117,18 @@ p.timeStamp {
 p.text {
     font-size: 24px;
     margin-left: 10px;
+    overflow-wrap: break-word;
 }
 
 p.username {
     margin-left: 10px;
+    overflow-wrap: break-word;
 }
 
 #roomSelect {
     width: 150px;
+}
+
+option {
+    width: 90%;
 }
