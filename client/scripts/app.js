@@ -26,7 +26,7 @@ $('#newRoom').on('click', function(e) {
   let roomName = prompt('Enter Room Name...');
   let message = {
     username: 'Chatterbox Bot',
-    text: `Creating Room ${roomName}`,
+    text: `Room Created: "${roomName}"!`,
     roomname: roomName 
   };
   app.handleSubmit(message.text, message.roomname, message.username);

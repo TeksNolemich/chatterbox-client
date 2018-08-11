@@ -1,6 +1,8 @@
 class Chatterbox {
   constructor() {
-    this.server = 'http://parse.sfm8.hackreactor.com';
+    this.domain = 'http://parse.sfm8.hackreactor.com';
+    this.resource = '/chatterbox/classes/messages';
+    this.server = this.domain + this.resource;
     this.user = null;
     this.friends = {};
     this.messages = {};
@@ -23,7 +25,7 @@ class Chatterbox {
     let that = this;
     $.ajax({
       // This is the url you should use to communicate with the parse API server.
-      url: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages',
+      url: that.server,
       type: 'POST',
       data: JSON.stringify(message),
       contentType: 'application/json',
@@ -41,12 +43,16 @@ class Chatterbox {
   fetch() {
     let that = this;
     $.ajax({
-      url: `http://parse.sfm8.hackreactor.com/chatterbox/classes/messages?order=-createdAt`,
+      url: that.server,
       type: 'GET',
       contentType: 'application/json',
       data: {
         limit: 1000,
-        where: { text: { $exists: true } }
+        where: { 
+          text: { $exists: true }
+          // roomname: { $in: ['Pikachu'] }
+       },
+        order: '-createdAt'
       },
       success: function (data) {
         that.messages = {};
@@ -60,8 +66,6 @@ class Chatterbox {
             that.messages[room].set(message.objectId, message);
           }
         });
-        // TODO: get this variable somehow without pulling from global scope
-        // set the room based on messages fetched... render display on that room
         if (!that.initialized) {
           let targetRoom = null;
           let targetRoomLength = 0;
